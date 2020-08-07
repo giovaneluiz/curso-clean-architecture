@@ -68,18 +68,19 @@ describe('Signup Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should return 400 if no password confirmation is provider', () => {
+  test('Should return 400 if no password confirmation fails', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
         name: 'any_name',
         email: 'any_email@mail.com',
-        password: 'any_password'
+        password: 'any_password',
+        passwordConfirmation: 'invalid_password'
       }
     }
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
-    expect(httpResponse.body).toEqual(new MissingParamError('passwordConfirmation'))
+    expect(httpResponse.body).toEqual(new InvalidParamError('passwordConfirmation'))
   })
 
   test('Should return 400 if email is invalid', () => {
@@ -113,7 +114,7 @@ describe('Signup Controller', () => {
     expect(isValidSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
 
-  test('Should return 500 if EmailValidator returns Trows', () => {
+  test('Should return 500 if EmailValidator returns Throws', () => {
     const { sut, emailValidatorStub } = makeSut()
     jest.spyOn(emailValidatorStub, 'isValid').mockImplementationOnce(() => {
       throw new Error()
