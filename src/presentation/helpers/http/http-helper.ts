@@ -1,5 +1,5 @@
-import { HttpResponse } from '../protocols/http'
-import { ServerError, UnautorizedError } from '../erros'
+import { HttpResponse } from '../../protocols/http'
+import { ServerError, UnautorizedError } from '../../erros'
 
 export const httpSuccess = (data: any): HttpResponse => ({
   statusCode: 200,
