@@ -1,5 +1,4 @@
 import { RequiredFieldValidation } from './required-field-validation'
-import supertest from 'supertest'
 import { MissingParamError } from '../../erros'
 
 describe('RequiredField Validation', () => {
@@ -7,5 +6,11 @@ describe('RequiredField Validation', () => {
     const sut = new RequiredFieldValidation('field')
     const error = sut.validate({ name: 'any_name' })
     expect(error).toEqual(new MissingParamError('field'))
+  })
+
+  test('Should not return if validation succeeds', () => {
+    const sut = new RequiredFieldValidation('field')
+    const error = sut.validate({ field: 'any_field' })
+    expect(error).toBeFalsy()
   })
 })
