@@ -15,8 +15,8 @@ beforeEach(async () => {
   await accountCollection.deleteMany({})
 })
 
-describe('Signup Routes', () => {
-  test('Should return an account on success', async () => {
+describe('POST /signup', () => {
+  test('Should return on 200', async () => {
     await request(app)
       .post('/api/signup')
       .send({
