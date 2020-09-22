@@ -44,17 +44,17 @@ describe('JWT Adapter', () => {
       await sut.decrypt('any_token')
       expect(verifySpy).toHaveBeenCalledWith('any_token', 'secret')
     })
-    test('Slould return a token on sign success', async () => {
+    test('Slould return a value on verify success', async () => {
       const sut = makeSut()
-      const accessToken = await sut.encrypt('any_id')
-      expect(accessToken).toBe('any_token')
+      const value = await sut.decrypt('any_token')
+      expect(value).toBe('any_value')
     })
-    test('Slould throw if sign throws', async () => {
+    test('Slould throw if verify throws', async () => {
       const sut = makeSut()
-      jest.spyOn(jwt, 'sign').mockImplementationOnce(() => {
+      jest.spyOn(jwt, 'verify').mockImplementationOnce(() => {
         throw new Error()
       })
-      const promise = sut.encrypt('any_id')
+      const promise = sut.decrypt('any_token')
       await expect(promise).rejects.toThrow
     })
   })
