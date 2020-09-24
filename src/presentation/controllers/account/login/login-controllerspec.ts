@@ -1,8 +1,7 @@
 import { LoginController } from './login-controller'
 import { badRequest, unautorized, httpSuccess, serverError } from '../../../helpers/http/http-helper'
 import { MissingParamError } from '../../../erros'
-import { HttpRequest, Authentication, Validation } from '../../survey/add-survey/add-survey-controller-protocols'
-import { AuthenticationModel } from '../../../../domain/usecases/authentication'
+import { Authentication, AuthenticationModel, Validation, HttpRequest } from '../login/login-controller-protocols'
 
 interface SutTypes {
   sut: LoginController
