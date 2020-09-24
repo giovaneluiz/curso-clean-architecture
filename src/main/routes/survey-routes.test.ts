@@ -22,50 +22,58 @@ beforeEach(async () => {
   accountCollection = await MongoHelper.getCollection('accounts')
   await accountCollection.deleteMany({})
 })
-
-describe('POST /survey', () => {
-  test('Should return 403 on add survey without accessToken', async () => {
-    await request(app)
-      .post('/api/surveys')
-      .send({
-        question: 'Question',
-        answers: [{
-          image: 'Answer 1',
-          answer: 'any_answer'
-        }, {
-          answer: 'Answer 2'
-        }]
+describe('Survey Routes', () => {
+  describe('POST /survey', () => {
+    test('Should return 403 on add survey without accessToken', async () => {
+      await request(app)
+        .post('/api/surveys')
+        .send({
+          question: 'Question',
+          answers: [{
+            image: 'Answer 1',
+            answer: 'any_answer'
+          }, {
+            answer: 'Answer 2'
+          }]
+        })
+        .expect(403)
+    })
+    test('Should return 204 on add survey with accessToken', async () => {
+      const res = await accountCollection.insertOne({
+        name: 'Giovane',
+        email: 'mail@mail.com',
+        password: 123,
+        role: 'admin'
       })
-      .expect(403)
+      const id = res.ops[0]._id
+      const accessToken = sign({ id }, env.jwtSecret)
+      await accountCollection.updateOne({
+        _id: id
+      }, {
+        $set: {
+          accessToken
+        }
+      })
+      await request(app)
+        .post('/api/surveys')
+        .set('x-access-token', accessToken)
+        .send({
+          question: 'Question',
+          answers: [{
+            image: 'Answer 1',
+            answer: 'any_answer'
+          }, {
+            answer: 'Answer 2'
+          }]
+        })
+        .expect(204)
+    })
   })
-  test('Should return 204 on add survey with accessToken', async () => {
-    const res = await accountCollection.insertOne({
-      name: 'Giovane',
-      email: 'mail@mail.com',
-      password: 123,
-      role: 'admin'
+  describe('GET /survey', () => {
+    test('Should return 403 on load surveys without accessToken', async () => {
+      await request(app)
+        .get('/api/surveys')
+        .expect(403)
     })
-    const id = res.ops[0]._id
-    const accessToken = sign({ id }, env.jwtSecret)
-    await accountCollection.updateOne({
-      _id: id
-    }, {
-      $set: {
-        accessToken
-      }
-    })
-    await request(app)
-      .post('/api/surveys')
-      .set('x-access-token', accessToken)
-      .send({
-        question: 'Question',
-        answers: [{
-          image: 'Answer 1',
-          answer: 'any_answer'
-        }, {
-          answer: 'Answer 2'
-        }]
-      })
-      .expect(204)
   })
 })
