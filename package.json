@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "sucrase-node src/main/server.ts",
-    "test": "jest --passWithNoTests --watch",
-    "test:staged": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:staged": "jest --passWithNoTests",
+    "test:ci": "npm test -- --coverage"
   },
   "keywords": [],
   "author": "",
@@ -44,7 +45,11 @@
     "express": "^4.17.1",
     "fast-glob": "^3.2.4",
     "jsonwebtoken": "^8.5.1",
+    "module-alias": "^2.2.2",
     "mongodb": "^3.6.0",
     "validator": "^13.1.1"
+  },
+  "_moduleAliases": {
+    "@": "dist"
   }
 }
