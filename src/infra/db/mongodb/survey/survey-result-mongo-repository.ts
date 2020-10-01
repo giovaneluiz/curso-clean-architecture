@@ -1,16 +1,11 @@
-import { AddSurveyRepository } from '@/data/protocols/db/survey/add-survey-repository'
-import { LoadSurveyByIdRepository } from '@/data/protocols/db/survey/load-survey-by-id-repository'
-import { LoadSurveysRepository } from '@/data/protocols/db/survey/load-survey-repository'
 import { SaveSurveyResultRepository } from '@/data/protocols/db/survey/save-survey-result-repository'
-import { SurveyModel } from '@/domain/models/survey'
 import { SurveyResultModel } from '@/domain/models/survey-result'
-import { AddSurveyModel } from '@/domain/usecases/survey/add-survey'
 import { SaveSurveyResultModel } from '@/domain/usecases/survey/save-survey-result'
 import { MongoHelper } from '@/infra/db/mongodb/helpers/mongo-helper'
 
-export class SurveyResultMongoRespository implements SaveSurveyResultRepository {
+export class SurveyResultMongoRepository implements SaveSurveyResultRepository {
   async save (data: SaveSurveyResultModel): Promise<SurveyResultModel> {
-    const surveyResultCollection = await MongoHelper.getCollection('surveysResults')
+    const surveyResultCollection = await MongoHelper.getCollection('surveyResults')
     const res = await surveyResultCollection.findOneAndUpdate({
       surveyId: data.surveyId,
       accountId: data.accountId
